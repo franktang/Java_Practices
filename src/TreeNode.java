@@ -1,4 +1,7 @@
+import apple.laf.JRSUIUtils;
+
 import java.util.ArrayList;
+import java.util.Stack;
 
 public class TreeNode {
 
@@ -28,6 +31,24 @@ public class TreeNode {
         return node;
     }
 
+    public TreeNode getNodeByValueNonRecursive(int value){
+        TreeNode node = this;
+        Stack<TreeNode> treeNodeStack = new Stack<>();
+        treeNodeStack.push(node);
+
+        while (!treeNodeStack.isEmpty()){
+            node = treeNodeStack.pop();
+
+            if (node.value == value) return node;
+
+            for (TreeNode child : node.children){
+                treeNodeStack.push(child);
+            }
+        }
+
+        return new TreeNode(value);
+    }
+
     public static void traverseTree(TreeNode root){
         System.out.println("The parent node is: " + root.value);
 
@@ -50,8 +71,8 @@ public class TreeNode {
         TreeNode root = new TreeNode(0);
         TreeNode parent, child;
         for (int[] inputRow : input){
-            parent = root.getNodeByValue(inputRow[0]);
-            child = root.getNodeByValue(inputRow[1]);
+            parent = root.getNodeByValueNonRecursive(inputRow[0]);
+            child = root.getNodeByValueNonRecursive(inputRow[1]);
             parent.children.add(child);
             child.parent = parent;
         }
